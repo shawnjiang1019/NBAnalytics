@@ -3,3 +3,7 @@ flask-cors
 pandas
 scikit-learn
 python-dotenv  # For environment variables
+pydantic
+fastapi
+nba_api
+

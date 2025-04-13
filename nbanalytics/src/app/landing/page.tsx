@@ -1,10 +1,15 @@
 "use client";
 
-import Dashboard from "@/components/ui/dashboard";
+import SearchBar from "@/components/ui/searchBar";
+import LogoutButton from "@/components/ui/logoutButton";
 
 const landing = () => {
     return(
-        <div>You are logged in</div>
+        <div>
+            <LogoutButton/>
+            <SearchBar/>
+
+        </div>
     );
 }
 export default landing;

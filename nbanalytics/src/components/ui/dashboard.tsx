@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bar, BarChart, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { Bar, BarChart, XAxis, YAxis, Tooltip, Legend, LineChart, Line } from "recharts";
 import { ChartContainer, ChartConfig } from "@/components/ui/chart";
 
 interface PlayerData {
@@ -12,6 +12,15 @@ interface PlayerData {
   recentAssists: number[];
   recentBlocks: number[];
   recentTurnovers: number[];
+}
+
+interface dataPoint {
+  matchup: string;
+  points: number;
+  rebounds: number;
+  assists: number;
+  blocks: number;
+  turnovers: number;
 }
 
 interface DashboardProps {
@@ -30,13 +39,13 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 
-const fetchPlayerData = async (player_id: string): Promise<PlayerData | null> => {
+const fetchPlayerData = async (player_id: string): Promise<dataPoint[] | null> => {
     try {
         const response = await fetch(`http://127.0.0.1:8080/players/${player_id}`);
         
         if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
 
-        const playerData: PlayerData = await response.json();
+        const playerData: dataPoint[] = await response.json();
         console.log("Fetched Player Data:", playerData); // Log after parsing
         return playerData;
     } catch (err) {
@@ -47,7 +56,7 @@ const fetchPlayerData = async (player_id: string): Promise<PlayerData | null> =>
 
 
 const Dashboard: React.FC<DashboardProps> = ({player_id}) => {
-  const [data, setData] = useState<PlayerData | null>(null);
+  const [data, setData] = useState<dataPoint[] | null>(null);
   const [chartData, setChartData] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,14 +72,7 @@ const Dashboard: React.FC<DashboardProps> = ({player_id}) => {
       //set the data 
       setData(playerData);
 
-      const transformedData = playerData.matchup.map((matchup, index) => ({
-        game: matchup,
-        Points: playerData.recentPoints[index] || 0,
-        Rebounds: playerData.recentRebounds[index] || 0,
-        Assists: playerData.recentAssists[index] || 0,
-        Blocks: playerData.recentBlocks[index] || 0,
-        Turnovers: playerData.recentTurnovers[index] || 0,
-      }));
+      const transformedData = playerData;
 
       setChartData(transformedData);
     };
@@ -82,17 +84,29 @@ const Dashboard: React.FC<DashboardProps> = ({player_id}) => {
   if (!data) return <p>Loading...</p>;
 
   return (
+    // <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+    //   <BarChart width={100} height={100} data={chartData}>
+    //     <XAxis dataKey="game" />
+    //     <YAxis />
+    //     <Tooltip />
+    //     <Legend />
+    //     <Bar dataKey="Points" fill="var(--color-desktop)" radius={4} />
+    //     <Bar dataKey="Rebounds" fill="var(--color-mobile)" radius={4} />
+    //     <Bar dataKey="Assists" fill="#34D399" radius={4} />
+    //   </BarChart>
+    // </ChartContainer>
     <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-      <BarChart width={600} height={300} data={data.recentPoints}>
-        <XAxis dataKey="game" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="Points" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="Rebounds" fill="var(--color-mobile)" radius={4} />
-        <Bar dataKey="Assists" fill="#34D399" radius={4} />
-      </BarChart>
+      <LineChart width={800} height={400}  data={chartData}>
+        <XAxis dataKey={"game"}/>
+        <YAxis/>
+        <Tooltip/>
+        <Legend/>
+        <Line type="monotone" dataKey="points" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="rebounds" stroke="#82ca9d" />
+      </LineChart>
+
     </ChartContainer>
+    
   );
 };
 

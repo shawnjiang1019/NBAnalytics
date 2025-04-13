@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 
-app =FastAPI();
+app =FastAPI(debug=True);
 app.include_router(router)
 
 app.add_middleware(

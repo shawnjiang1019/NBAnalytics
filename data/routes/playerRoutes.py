@@ -26,7 +26,18 @@ async def queryPlayer(player_id: str):
     ast_list = [game["AST"] for game in stats]
     blk_list = [game["BLK"] for game in stats]
     tov_list = [game["TOV"] for game in stats]
-    return {"player": player_id, "matchup": matchup_list, "points": pts_list, "rebounds": reb_list, "assists": ast_list, "blocks": blk_list, "Turnovers": tov_list}
+    finalData = []
+    for i in range(len(matchup_list)):
+        dataPoint = {}
+        dataPoint["points"] = pts_list[i]
+        dataPoint["matchup"] = matchup_list[i]
+        dataPoint["rebounds"] = reb_list[i]
+        dataPoint["assists"] = ast_list[i]
+        dataPoint["blocks"] = blk_list[i]
+        dataPoint["turnovers"] = tov_list[i]
+        finalData.append(dataPoint)
+
+    return finalData
 
 
 
