@@ -3,6 +3,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { ReactNode } from "react";
+import Auth0ProviderWithNavigate from "@/components/Auth0ProviderWithNavigate";
+
+type Props = {
+  children: ReactNode;
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,26 +22,12 @@ const geistMono = Geist_Mono({
 
 
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Props) {
   return (
-    <Auth0Provider
-      domain="dev-4m08esq3iy51y7tm.us.auth0.com"
-      clientId="yT5WlTlD4jv8geaJjaWEuoFiEmEBciA0"
-      authorizationParams={{
-        redirect_uri: typeof window !== "undefined" ? window.location.origin : "",
-      }}
-    >
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+      <Auth0ProviderWithNavigate>{children}</Auth0ProviderWithNavigate>
       </body>
     </html>
-    </Auth0Provider>
   );
 }

@@ -15,7 +15,11 @@ const LoginButton: React.FC<LoginButtonProps> = ({ className }) => {
     <Button
       variant="default"  // You can change this to any other variant if you want
       size="default"     // You can change the size if needed
-      onClick={() => loginWithRedirect()}  // Log in when clicked
+      onClick={() => loginWithRedirect({
+        appState: {
+          returnTo: "/landing"
+        }
+      })}  // Log in when clicked
       className={className}  // Forward className to Button
     >
       Log In
