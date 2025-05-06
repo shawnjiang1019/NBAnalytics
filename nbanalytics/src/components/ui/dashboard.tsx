@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Bar, BarChart, XAxis, YAxis, Tooltip, Legend, LineChart, Line } from "recharts";
 import { ChartContainer, ChartConfig } from "@/components/ui/chart";
+import axios from 'axios';
+
 
 interface PlayerData {
   playerName: string;
@@ -12,6 +14,11 @@ interface PlayerData {
   recentAssists: number[];
   recentBlocks: number[];
   recentTurnovers: number[];
+}
+
+interface PlayerSearchInfo {
+  name: string;
+  id: string;
 }
 
 interface dataPoint {
@@ -39,19 +46,21 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 
-const fetchPlayerData = async (player_id: string): Promise<dataPoint[] | null> => {
-    try {
-        const response = await fetch(`http://127.0.0.1:8080/players/${player_id}`);
-        
-        if (!response.ok) throw new Error(`Failed to fetch data: ${response.statusText}`);
 
-        const playerData: dataPoint[] = await response.json();
-        console.log("Fetched Player Data:", playerData); // Log after parsing
-        return playerData;
-    } catch (err) {
-        console.error("Error fetching player data:", (err as Error).message);
-        return null;
-    }
+const fetchPlayerData = async (player_id: string): Promise<dataPoint[] | null> => {
+  try {
+      const response = await axios.get<dataPoint[]>(`http://127.0.0.1:8080/players/${player_id}`);
+      console.log("Fetched Player Data:", response.data);
+      return response.data;
+  } catch (err) {
+      if (axios.isAxiosError(err)) {
+          const message = err.response?.statusText || err.message;
+          console.error("Error fetching player data:", message);
+      } else {
+          console.error("Error fetching player data:", (err as Error).message);
+      }
+      return null;
+  }
 };
 
 

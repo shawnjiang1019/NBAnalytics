@@ -7,7 +7,7 @@ import { withAuthenticationRequired } from "@auth0/auth0-react";
 const landing = () => {
     return(
         <div>
-            <LogoutButton/>
+            
             <SearchBar/>
 
         </div>

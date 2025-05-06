@@ -1,7 +1,6 @@
 "use client";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import { ReactNode } from "react";
 import Auth0ProviderWithNavigate from "@/components/Auth0ProviderWithNavigate";
@@ -27,11 +26,13 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body>
-      
+      <SidebarProvider>
+        <AppSidebar/>
           <main>
-            
+            <SidebarTrigger/>
             <Auth0ProviderWithNavigate>{children}</Auth0ProviderWithNavigate>
           </main>
+      </SidebarProvider>
       
       </body>
     </html>

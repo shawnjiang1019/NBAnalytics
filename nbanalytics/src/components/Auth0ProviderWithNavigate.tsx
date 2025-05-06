@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Auth0Provider } from '@auth0/auth0-react';
+import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { ReactNode } from 'react';
 
 
@@ -10,7 +10,7 @@ export default function Auth0ProviderWithNavigate({ children }: { children: Reac
   const router = useRouter();
 
   const onRedirectCallback = (appState?: any) => {
-    router.push(appState?.returnTo || '/dashboard');
+    router.push(appState?.returnTo || '/landing');
   };
   const client_id = "yT5WlTlD4jv8geaJjaWEuoFiEmEBciA0";
   const domain = "dev-4m08esq3iy51y7tm.us.auth0.com";

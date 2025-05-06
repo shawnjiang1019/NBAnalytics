@@ -8,14 +8,17 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarMenuItem, 
 } from "@/components/ui/sidebar"
+
+import LogoutButton from "./ui/logoutButton"
+import { LogOutIcon } from "lucide-react"
 
 // Menu items.
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/landing",
     icon: Home,
   },
   {
@@ -58,6 +61,8 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <LogoutButton/>
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
